@@ -26,6 +26,7 @@ partial class MainForm
         listBoxTeams = new ListBox();
         labelTeams = new Label();
         labelInfo = new Label();
+        buttonOpen = new Button();
         groupBoxInfo.SuspendLayout();
         SuspendLayout();
         //
@@ -79,6 +80,7 @@ partial class MainForm
         //
         // groupBoxInfo
         //
+        groupBoxInfo.Controls.Add(buttonOpen);
         groupBoxInfo.Controls.Add(listBoxTeams);
         groupBoxInfo.Controls.Add(labelTeams);
         groupBoxInfo.Controls.Add(labelInfo);
@@ -93,7 +95,7 @@ partial class MainForm
         //
         labelInfo.Location = new Point(12, 24);
         labelInfo.Name = "labelInfo";
-        labelInfo.Size = new Size(416, 80);
+        labelInfo.Size = new Size(416, 85);
         labelInfo.TabIndex = 0;
         labelInfo.Text = "Турнір не вибрано";
         //
@@ -111,8 +113,18 @@ partial class MainForm
         listBoxTeams.FormattingEnabled = true;
         listBoxTeams.Location = new Point(12, 130);
         listBoxTeams.Name = "listBoxTeams";
-        listBoxTeams.Size = new Size(416, 244);
+        listBoxTeams.Size = new Size(416, 199);
         listBoxTeams.TabIndex = 2;
+        //
+        // buttonOpen
+        //
+        buttonOpen.Location = new Point(12, 344);
+        buttonOpen.Name = "buttonOpen";
+        buttonOpen.Size = new Size(416, 36);
+        buttonOpen.TabIndex = 3;
+        buttonOpen.Text = "Календар, результати і таблиця";
+        buttonOpen.UseVisualStyleBackColor = true;
+        buttonOpen.Click += buttonOpen_Click;
         //
         // MainForm
         //
@@ -147,4 +159,5 @@ partial class MainForm
     private Label labelInfo;
     private Label labelTeams;
     private ListBox listBoxTeams;
+    private Button buttonOpen;
 }

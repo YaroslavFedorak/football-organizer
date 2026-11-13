@@ -53,10 +53,12 @@ public partial class MainForm : Form
             return;
         }
 
+        int played = t.Matches.Count(m => m.IsPlayed);
         labelInfo.Text = t.Name + "\n" +
             "Тип: " + t.TypeName + "\n" +
             "Матчі у відповідь: " + (t.HasReturnMatches ? "так" : "ні") + "\n" +
-            "Команд: " + t.Teams.Count;
+            "Команд: " + t.Teams.Count + "\n" +
+            "Зіграно матчів: " + played + " з " + t.Matches.Count;
 
         foreach (Team team in t.Teams)
             listBoxTeams.Items.Add(team);
@@ -89,6 +91,21 @@ public partial class MainForm : Form
         {
             RefreshList();
             listBoxTournaments.SelectedIndex = index;
+        }
+    }
+
+    private void buttonOpen_Click(object sender, EventArgs e)
+    {
+        if (listBoxTournaments.SelectedItem is League league)
+        {
+            LeagueForm form = new LeagueForm(league);
+            form.ShowDialog(this);
+            ShowInfo(league);
+        }
+        else if (listBoxTournaments.SelectedItem is Cup)
+        {
+            // TODO: зробити форму для кубка
+            MessageBox.Show("Кубок поки в розробці", "Кубок", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
