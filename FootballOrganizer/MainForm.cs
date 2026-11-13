@@ -22,6 +22,14 @@ public partial class MainForm : Form
         upl.AddTeam(new Team("Шахтар", "Донецьк"));
         upl.AddTeam(new Team("Дніпро-1", "Дніпро"));
         upl.AddTeam(new Team("Ворскла", "Полтава"));
+        upl.AddTeam(new Team("Зоря", "Луганськ"));
+        upl.AddTeam(new Team("Полісся", "Житомир"));
+        upl.GenerateSchedule();
+        // кілька результатів щоб таблиця не була пуста
+        upl.GetRound(1)[0].SetResult(2, 1);
+        upl.GetRound(1)[1].SetResult(0, 0);
+        upl.GetRound(1)[2].SetResult(1, 3);
+        upl.GetRound(2)[0].SetResult(4, 2);
         tournaments.Add(upl);
 
         Cup cup = new Cup("Кубок України", false);
