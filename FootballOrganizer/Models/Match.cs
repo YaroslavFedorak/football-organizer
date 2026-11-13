@@ -24,9 +24,11 @@ public class Match
         get { return HomeGoals != null && AwayGoals != null; }
     }
 
-    // TODO: перевірка що голи не відємні
     public void SetResult(int homeGoals, int awayGoals)
     {
+        if (homeGoals < 0 || awayGoals < 0)
+            throw new ArgumentException("Кількість голів не може бути від'ємною");
+
         HomeGoals = homeGoals;
         AwayGoals = awayGoals;
     }
