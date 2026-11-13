@@ -76,4 +76,40 @@ public class League : Tournament
     {
         return Matches.Where(m => m.Round == round).ToList();
     }
+
+    // турнірна таблиця по зіграних матчах
+    public List<StandingRow> GetStandings()
+    {
+        Dictionary<Team, StandingRow> rows = new Dictionary<Team, StandingRow>();
+        foreach (Team t in Teams)
+            rows[t] = new StandingRow(t);
+
+        foreach (Match m in Matches)
+        {
+            if (!m.IsPlayed)
+                continue;
+            // команду могли видалити з турніру
+            if (!rows.ContainsKey(m.HomeTeam) || !rows.ContainsKey(m.AwayTeam))
+                continue;
+
+            int home = m.HomeGoals!.Value;
+            int away = m.AwayGoals!.Value;
+            rows[m.HomeTeam].AddResult(home, away);
+            rows[m.AwayTeam].AddResult(away, home);
+        }
+
+        List<StandingRow> table = rows.Values.ToList();
+        // спочатку очки, потім різниця м'ячів, потім забиті
+        table.Sort((x, y) =>
+        {
+            if (x.Points != y.Points)
+                return y.Points.CompareTo(x.Points);
+            if (x.GoalDifference != y.GoalDifference)
+                return y.GoalDifference.CompareTo(x.GoalDifference);
+            if (x.GoalsFor != y.GoalsFor)
+                return y.GoalsFor.CompareTo(x.GoalsFor);
+            return string.Compare(x.Team.Name, y.Team.Name);
+        });
+        return table;
+    }
 }
