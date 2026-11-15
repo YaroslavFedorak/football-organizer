@@ -70,13 +70,56 @@ public class Cup : Tournament
         tie.Matches.Add(m1);
         Matches.Add(m1);
 
-        if (HasReturnMatches)
+        // фінал завжди один матч
+        bool isFinal = round == TotalRounds;
+        if (HasReturnMatches && !isFinal)
         {
             Match m2 = new Match(b, a, round);
             tie.Matches.Add(m2);
             Matches.Add(m2);
         }
         return tie;
+    }
+
+    public List<CupTie>? CurrentRound
+    {
+        get { return Rounds.Count == 0 ? null : Rounds[Rounds.Count - 1]; }
+    }
+
+    // можна переходити далі, якщо в поточному раунді всі пари вирішені і це не фінал
+    public bool CanAdvance
+    {
+        get
+        {
+            List<CupTie>? current = CurrentRound;
+            return current != null && current.Count > 1 && current.All(t => t.IsFinished);
+        }
+    }
+
+    // переможець фіналу
+    public Team? Champion
+    {
+        get
+        {
+            List<CupTie>? current = CurrentRound;
+            if (current == null || current.Count != 1)
+                return null;
+            return current[0].Winner;
+        }
+    }
+
+    // переможці пар 1 і 2 грають між собою, 3 і 4 між собою і т.д.
+    public void AdvanceRound()
+    {
+        if (!CanAdvance)
+            throw new InvalidOperationException("Ще не всі пари поточного раунду зіграні");
+
+        List<CupTie> current = CurrentRound!;
+        int round = Rounds.Count + 1;
+        List<CupTie> next = new List<CupTie>();
+        for (int i = 0; i < current.Count; i += 2)
+            next.Add(CreateTie(current[i].Winner!, current[i + 1].Winner!, round));
+        Rounds.Add(next);
     }
 
     // назва раунду: 1/8 фіналу, 1/4, півфінал, фінал
