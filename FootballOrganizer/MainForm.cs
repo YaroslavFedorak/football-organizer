@@ -110,10 +110,11 @@ public partial class MainForm : Form
             form.ShowDialog(this);
             ShowInfo(league);
         }
-        else if (listBoxTournaments.SelectedItem is Cup)
+        else if (listBoxTournaments.SelectedItem is Cup cup)
         {
-            // TODO: зробити форму для кубка
-            MessageBox.Show("Кубок поки в розробці", "Кубок", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            CupForm form = new CupForm(cup);
+            form.ShowDialog(this);
+            ShowInfo(cup);
         }
     }
 
