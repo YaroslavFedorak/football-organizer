@@ -37,6 +37,19 @@ public partial class MainForm : Form
         cup.AddTeam(new Team("Шахтар", "Донецьк"));
         cup.AddTeam(new Team("Зоря", "Луганськ"));
         cup.AddTeam(new Team("Олександрія", "Олександрія"));
+        cup.AddTeam(new Team("Кривбас", "Кривий Ріг"));
+        cup.AddTeam(new Team("Ворскла", "Полтава"));
+        // 6 команд - дві пройдуть в 1/2 без гри
+        cup.GenerateSchedule();
+        foreach (CupTie tie in cup.Rounds[0])
+        {
+            if (!tie.IsBye)
+            {
+                tie.Matches[0].SetResult(1, 1);
+                tie.PenaltyWinner = tie.TeamA;
+                break;
+            }
+        }
         tournaments.Add(cup);
     }
 
