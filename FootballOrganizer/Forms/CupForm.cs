@@ -25,6 +25,7 @@ public partial class CupForm : Form
         {
             labelStatus.Text = "Жеребкування ще не проводилось";
             buttonNext.Enabled = false;
+            panelCanvas.Invalidate();
             return;
         }
 
@@ -37,6 +38,7 @@ public partial class CupForm : Form
 
     private void UpdateStatus()
     {
+        ResizeCanvas();
         if (cup.Champion != null)
             labelStatus.Text = "Володар кубка: " + cup.Champion.Name;
         else
@@ -205,5 +207,111 @@ public partial class CupForm : Form
     {
         cup.AdvanceRound();
         FillRounds();
+    }
+
+    // ---------------- сітка кубка ----------------
+
+    private const int BoxW = 190;
+    private const int BoxH = 44;
+    private const int Gap = 50;
+    private const int Top = 20;
+    private const int Left = 20;
+
+    // y центру пари j в раунді r (r з нуля)
+    // пара наступного раунду стоїть посередині між двома своїми попередніми
+    private int CenterY(int r, int j)
+    {
+        int unit = BoxH + 16;
+        int k = (int)Math.Pow(2, r);
+        return Top + BoxH / 2 + (int)((j * k + (k - 1) / 2.0) * unit);
+    }
+
+    private void ResizeCanvas()
+    {
+        if (cup.Teams.Count < 2)
+            return;
+        int rounds = cup.TotalRounds;
+        int firstTies = cup.BracketSize / 2;
+        panelCanvas.Width = Left + (rounds + 1) * (BoxW + Gap);
+        panelCanvas.Height = Top * 2 + firstTies * (BoxH + 16);
+        panelCanvas.Invalidate();
+    }
+
+    private void panelCanvas_Paint(object? sender, PaintEventArgs e)
+    {
+        Graphics g = e.Graphics;
+        g.Clear(Color.White);
+        if (cup.Rounds.Count == 0)
+        {
+            g.DrawString("Жеребкування ще не проводилось", Font, Brushes.Gray, Left, Top);
+            return;
+        }
+
+        Font bold = new Font(Font, FontStyle.Bold);
+        Pen line = new Pen(Color.Gray);
+        int rounds = cup.TotalRounds;
+
+        for (int r = 0; r < rounds; r++)
+        {
+            int ties = cup.BracketSize / (int)Math.Pow(2, r + 1);
+            int x = Left + r * (BoxW + Gap);
+            g.DrawString(cup.RoundName(r + 1), bold, Brushes.DarkBlue, x, 2);
+
+            for (int j = 0; j < ties; j++)
+            {
+                int cy = CenterY(r, j);
+                Rectangle box = new Rectangle(x, cy - BoxH / 2, BoxW, BoxH);
+                g.FillRectangle(Brushes.WhiteSmoke, box);
+                g.DrawRectangle(Pens.DarkGray, box);
+                g.DrawLine(Pens.LightGray, box.Left, cy, box.Right, cy);
+
+                CupTie? tie = null;
+                if (r < cup.Rounds.Count && j < cup.Rounds[r].Count)
+                    tie = cup.Rounds[r][j];
+
+                string nameA = "?", nameB = "?", scoreA = "", scoreB = "";
+                bool winA = false, winB = false;
+                if (tie != null)
+                {
+                    nameA = tie.TeamA.Name;
+                    nameB = tie.IsBye ? "вільний прохід" : tie.TeamB!.Name;
+                    if (!tie.IsBye && tie.Matches.Any(m => m.IsPlayed))
+                    {
+                        scoreA = tie.GoalsA.ToString();
+                        scoreB = tie.GoalsB.ToString();
+                    }
+                    winA = tie.Winner == tie.TeamA;
+                    winB = tie.Winner != null && tie.Winner == tie.TeamB;
+                }
+
+                g.DrawString(nameA, winA ? bold : Font, Brushes.Black, x + 4, cy - BoxH / 2 + 3);
+                g.DrawString(nameB, winB ? bold : Font, tie != null && tie.IsBye ? Brushes.Gray : Brushes.Black, x + 4, cy + 3);
+                g.DrawString(scoreA, Font, Brushes.Black, x + BoxW - 22, cy - BoxH / 2 + 3);
+                g.DrawString(scoreB, Font, Brushes.Black, x + BoxW - 22, cy + 3);
+
+                // лінія до пари наступного раунду
+                if (r < rounds - 1)
+                {
+                    int midX = x + BoxW + Gap / 2;
+                    int nextY = CenterY(r + 1, j / 2);
+                    g.DrawLine(line, x + BoxW, cy, midX, cy);
+                    g.DrawLine(line, midX, cy, midX, nextY);
+                    g.DrawLine(line, midX, nextY, x + BoxW + Gap, nextY);
+                }
+            }
+        }
+
+        // переможець
+        if (cup.Champion != null)
+        {
+            int x = Left + rounds * (BoxW + Gap);
+            int cy = CenterY(rounds - 1, 0);
+            g.DrawLine(line, x - Gap, cy, x, cy);
+            g.DrawString("Володар кубка:", Font, Brushes.DarkGreen, x, cy - 20);
+            g.DrawString(cup.Champion.Name, bold, Brushes.DarkGreen, x, cy);
+        }
+
+        bold.Dispose();
+        line.Dispose();
     }
 }

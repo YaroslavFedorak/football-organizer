@@ -284,6 +284,7 @@ partial class CupForm
         panelCanvas.Name = "panelCanvas";
         panelCanvas.Size = new Size(740, 420);
         panelCanvas.TabIndex = 0;
+        panelCanvas.Paint += panelCanvas_Paint;
         //
         // CupForm
         //
