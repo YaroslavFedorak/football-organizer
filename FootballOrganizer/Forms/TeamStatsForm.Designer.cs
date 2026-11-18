@@ -89,6 +89,7 @@ partial class TeamStatsForm
         panelChart.Name = "panelChart";
         panelChart.Size = new Size(374, 433);
         panelChart.TabIndex = 0;
+        panelChart.Paint += panelChart_Paint;
         //
         // TeamStatsForm
         //
