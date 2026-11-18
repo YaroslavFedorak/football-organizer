@@ -131,6 +131,15 @@ public partial class MainForm : Form
         }
     }
 
+    private void buttonStats_Click(object sender, EventArgs e)
+    {
+        if (listBoxTournaments.SelectedItem is Tournament t)
+        {
+            TeamStatsForm form = new TeamStatsForm(t);
+            form.ShowDialog(this);
+        }
+    }
+
     private void buttonDelete_Click(object sender, EventArgs e)
     {
         if (listBoxTournaments.SelectedItem is Tournament t)

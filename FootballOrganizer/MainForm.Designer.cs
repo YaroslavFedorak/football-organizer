@@ -27,6 +27,7 @@ partial class MainForm
         labelTeams = new Label();
         labelInfo = new Label();
         buttonOpen = new Button();
+        buttonStats = new Button();
         groupBoxInfo.SuspendLayout();
         SuspendLayout();
         //
@@ -80,6 +81,7 @@ partial class MainForm
         //
         // groupBoxInfo
         //
+        groupBoxInfo.Controls.Add(buttonStats);
         groupBoxInfo.Controls.Add(buttonOpen);
         groupBoxInfo.Controls.Add(listBoxTeams);
         groupBoxInfo.Controls.Add(labelTeams);
@@ -113,18 +115,28 @@ partial class MainForm
         listBoxTeams.FormattingEnabled = true;
         listBoxTeams.Location = new Point(12, 130);
         listBoxTeams.Name = "listBoxTeams";
-        listBoxTeams.Size = new Size(416, 199);
+        listBoxTeams.Size = new Size(416, 154);
         listBoxTeams.TabIndex = 2;
         //
         // buttonOpen
         //
-        buttonOpen.Location = new Point(12, 344);
+        buttonOpen.Location = new Point(12, 298);
         buttonOpen.Name = "buttonOpen";
         buttonOpen.Size = new Size(416, 36);
         buttonOpen.TabIndex = 3;
         buttonOpen.Text = "Календар, результати і таблиця";
         buttonOpen.UseVisualStyleBackColor = true;
         buttonOpen.Click += buttonOpen_Click;
+        // 
+        // buttonStats
+        // 
+        buttonStats.Location = new Point(12, 344);
+        buttonStats.Name = "buttonStats";
+        buttonStats.Size = new Size(416, 36);
+        buttonStats.TabIndex = 4;
+        buttonStats.Text = "Статистика команди";
+        buttonStats.UseVisualStyleBackColor = true;
+        buttonStats.Click += buttonStats_Click;
         //
         // MainForm
         //
@@ -160,4 +172,5 @@ partial class MainForm
     private Label labelTeams;
     private ListBox listBoxTeams;
     private Button buttonOpen;
+    private Button buttonStats;
 }
