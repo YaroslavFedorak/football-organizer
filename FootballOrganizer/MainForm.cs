@@ -1,3 +1,4 @@
+using FootballOrganizer.Data;
 using FootballOrganizer.Forms;
 using FootballOrganizer.Models;
 
@@ -6,15 +7,36 @@ namespace FootballOrganizer;
 public partial class MainForm : Form
 {
     private List<Tournament> tournaments = new List<Tournament>();
+    private string currentPath = Storage.DefaultPath;
 
     public MainForm()
     {
         InitializeComponent();
-        AddTestData();
+        LoadOnStart();
         RefreshList();
     }
 
-    // тимчасово, поки немає збереження у файл
+    private void LoadOnStart()
+    {
+        if (!File.Exists(currentPath))
+        {
+            // перший запуск - показуємо приклад
+            AddTestData();
+            return;
+        }
+
+        try
+        {
+            tournaments = Storage.Load(currentPath);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Не вдалося прочитати файл з турнірами:\n" + ex.Message, "Помилка",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    // приклад турнірів для першого запуску
     private void AddTestData()
     {
         League upl = new League("Українська Прем'єр-ліга", true);
@@ -25,11 +47,13 @@ public partial class MainForm : Form
         upl.AddTeam(new Team("Зоря", "Луганськ"));
         upl.AddTeam(new Team("Полісся", "Житомир"));
         upl.GenerateSchedule();
-        // кілька результатів щоб таблиця не була пуста
-        upl.GetRound(1)[0].SetResult(2, 1);
-        upl.GetRound(1)[1].SetResult(0, 0);
-        upl.GetRound(1)[2].SetResult(1, 3);
-        upl.GetRound(2)[0].SetResult(4, 2);
+        // результати перших 6 турів, щоб було що подивитись в таблиці і статистиці
+        Random rnd = new Random(7);
+        foreach (Match m in upl.Matches)
+        {
+            if (m.Round <= 6)
+                m.SetResult(rnd.Next(0, 5), rnd.Next(0, 4));
+        }
         tournaments.Add(upl);
 
         Cup cup = new Cup("Кубок України", false);
@@ -138,6 +162,68 @@ public partial class MainForm : Form
             TeamStatsForm form = new TeamStatsForm(t);
             form.ShowDialog(this);
         }
+    }
+
+    // ---------------- меню Файл ----------------
+
+    private bool SaveTo(string path)
+    {
+        try
+        {
+            Storage.Save(path, tournaments);
+            currentPath = path;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Не вдалося зберегти:\n" + ex.Message, "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+    }
+
+    private void menuOpen_Click(object sender, EventArgs e)
+    {
+        using OpenFileDialog dialog = new OpenFileDialog();
+        dialog.Filter = "Турніри (*.json)|*.json|Всі файли (*.*)|*.*";
+        if (dialog.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        try
+        {
+            tournaments = Storage.Load(dialog.FileName);
+            currentPath = dialog.FileName;
+            RefreshList();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Не вдалося відкрити файл:\n" + ex.Message, "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void menuSave_Click(object sender, EventArgs e)
+    {
+        if (SaveTo(currentPath))
+            MessageBox.Show("Збережено у файл\n" + currentPath, "Збереження", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void menuSaveAs_Click(object sender, EventArgs e)
+    {
+        using SaveFileDialog dialog = new SaveFileDialog();
+        dialog.Filter = "Турніри (*.json)|*.json";
+        dialog.FileName = "tournaments.json";
+        if (dialog.ShowDialog(this) == DialogResult.OK)
+            SaveTo(dialog.FileName);
+    }
+
+    private void menuExit_Click(object sender, EventArgs e)
+    {
+        Close();
+    }
+
+    // при закритті програми все зберігається автоматично
+    private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        SaveTo(currentPath);
     }
 
     private void buttonDelete_Click(object sender, EventArgs e)

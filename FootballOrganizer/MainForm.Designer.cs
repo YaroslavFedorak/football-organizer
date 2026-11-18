@@ -17,6 +17,13 @@ partial class MainForm
 
     private void InitializeComponent()
     {
+        menuStrip1 = new MenuStrip();
+        menuFile = new ToolStripMenuItem();
+        menuOpen = new ToolStripMenuItem();
+        menuSave = new ToolStripMenuItem();
+        menuSaveAs = new ToolStripMenuItem();
+        menuSeparator = new ToolStripSeparator();
+        menuExit = new ToolStripMenuItem();
         labelTournaments = new Label();
         listBoxTournaments = new ListBox();
         buttonAdd = new Button();
@@ -28,13 +35,64 @@ partial class MainForm
         labelInfo = new Label();
         buttonOpen = new Button();
         buttonStats = new Button();
+        menuStrip1.SuspendLayout();
         groupBoxInfo.SuspendLayout();
         SuspendLayout();
+        // 
+        // menuStrip1
+        // 
+        menuStrip1.Items.AddRange(new ToolStripItem[] { menuFile });
+        menuStrip1.Location = new Point(0, 0);
+        menuStrip1.Name = "menuStrip1";
+        menuStrip1.Size = new Size(800, 24);
+        menuStrip1.TabIndex = 6;
+        // 
+        // menuFile
+        // 
+        menuFile.DropDownItems.AddRange(new ToolStripItem[] { menuOpen, menuSave, menuSaveAs, menuSeparator, menuExit });
+        menuFile.Name = "menuFile";
+        menuFile.Size = new Size(48, 20);
+        menuFile.Text = "Файл";
+        // 
+        // menuOpen
+        // 
+        menuOpen.Name = "menuOpen";
+        menuOpen.ShortcutKeys = Keys.Control | Keys.O;
+        menuOpen.Size = new Size(200, 22);
+        menuOpen.Text = "Відкрити...";
+        menuOpen.Click += menuOpen_Click;
+        // 
+        // menuSave
+        // 
+        menuSave.Name = "menuSave";
+        menuSave.ShortcutKeys = Keys.Control | Keys.S;
+        menuSave.Size = new Size(200, 22);
+        menuSave.Text = "Зберегти";
+        menuSave.Click += menuSave_Click;
+        // 
+        // menuSaveAs
+        // 
+        menuSaveAs.Name = "menuSaveAs";
+        menuSaveAs.Size = new Size(200, 22);
+        menuSaveAs.Text = "Зберегти як...";
+        menuSaveAs.Click += menuSaveAs_Click;
+        // 
+        // menuSeparator
+        // 
+        menuSeparator.Name = "menuSeparator";
+        menuSeparator.Size = new Size(197, 6);
+        // 
+        // menuExit
+        // 
+        menuExit.Name = "menuExit";
+        menuExit.Size = new Size(200, 22);
+        menuExit.Text = "Вихід";
+        menuExit.Click += menuExit_Click;
         //
         // labelTournaments
         //
         labelTournaments.AutoSize = true;
-        labelTournaments.Location = new Point(12, 12);
+        labelTournaments.Location = new Point(12, 36);
         labelTournaments.Name = "labelTournaments";
         labelTournaments.Size = new Size(48, 15);
         labelTournaments.TabIndex = 0;
@@ -43,7 +101,7 @@ partial class MainForm
         // listBoxTournaments
         //
         listBoxTournaments.FormattingEnabled = true;
-        listBoxTournaments.Location = new Point(12, 32);
+        listBoxTournaments.Location = new Point(12, 56);
         listBoxTournaments.Name = "listBoxTournaments";
         listBoxTournaments.Size = new Size(320, 349);
         listBoxTournaments.TabIndex = 1;
@@ -51,7 +109,7 @@ partial class MainForm
         //
         // buttonAdd
         //
-        buttonAdd.Location = new Point(12, 392);
+        buttonAdd.Location = new Point(12, 416);
         buttonAdd.Name = "buttonAdd";
         buttonAdd.Size = new Size(100, 30);
         buttonAdd.TabIndex = 2;
@@ -61,7 +119,7 @@ partial class MainForm
         //
         // buttonEdit
         //
-        buttonEdit.Location = new Point(122, 392);
+        buttonEdit.Location = new Point(122, 416);
         buttonEdit.Name = "buttonEdit";
         buttonEdit.Size = new Size(100, 30);
         buttonEdit.TabIndex = 3;
@@ -71,7 +129,7 @@ partial class MainForm
         //
         // buttonDelete
         //
-        buttonDelete.Location = new Point(232, 392);
+        buttonDelete.Location = new Point(232, 416);
         buttonDelete.Name = "buttonDelete";
         buttonDelete.Size = new Size(100, 30);
         buttonDelete.TabIndex = 4;
@@ -86,7 +144,7 @@ partial class MainForm
         groupBoxInfo.Controls.Add(listBoxTeams);
         groupBoxInfo.Controls.Add(labelTeams);
         groupBoxInfo.Controls.Add(labelInfo);
-        groupBoxInfo.Location = new Point(348, 26);
+        groupBoxInfo.Location = new Point(348, 50);
         groupBoxInfo.Name = "groupBoxInfo";
         groupBoxInfo.Size = new Size(440, 396);
         groupBoxInfo.TabIndex = 5;
@@ -142,18 +200,23 @@ partial class MainForm
         //
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 434);
+        ClientSize = new Size(800, 458);
         Controls.Add(groupBoxInfo);
         Controls.Add(buttonDelete);
         Controls.Add(buttonEdit);
         Controls.Add(buttonAdd);
         Controls.Add(listBoxTournaments);
         Controls.Add(labelTournaments);
+        Controls.Add(menuStrip1);
+        MainMenuStrip = menuStrip1;
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
         Name = "MainForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Футбольний органайзер";
+        FormClosing += MainForm_FormClosing;
+        menuStrip1.ResumeLayout(false);
+        menuStrip1.PerformLayout();
         groupBoxInfo.ResumeLayout(false);
         groupBoxInfo.PerformLayout();
         ResumeLayout(false);
@@ -162,6 +225,13 @@ partial class MainForm
 
     #endregion
 
+    private MenuStrip menuStrip1;
+    private ToolStripMenuItem menuFile;
+    private ToolStripMenuItem menuOpen;
+    private ToolStripMenuItem menuSave;
+    private ToolStripMenuItem menuSaveAs;
+    private ToolStripSeparator menuSeparator;
+    private ToolStripMenuItem menuExit;
     private Label labelTournaments;
     private ListBox listBoxTournaments;
     private Button buttonAdd;
