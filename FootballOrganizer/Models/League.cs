@@ -78,7 +78,8 @@ public class League : Tournament
     }
 
     // турнірна таблиця по зіграних матчах
-    public List<StandingRow> GetStandings()
+    // upToRound - рахувати тільки тури до цього включно (для графіка місця)
+    public List<StandingRow> GetStandings(int upToRound = int.MaxValue)
     {
         Dictionary<Team, StandingRow> rows = new Dictionary<Team, StandingRow>();
         foreach (Team t in Teams)
@@ -86,7 +87,7 @@ public class League : Tournament
 
         foreach (Match m in Matches)
         {
-            if (!m.IsPlayed)
+            if (!m.IsPlayed || m.Round > upToRound)
                 continue;
             // команду могли видалити з турніру
             if (!rows.ContainsKey(m.HomeTeam) || !rows.ContainsKey(m.AwayTeam))
