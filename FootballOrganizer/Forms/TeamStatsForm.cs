@@ -71,7 +71,7 @@ public partial class TeamStatsForm : Form
             return;
         }
 
-        int left = 35, top = 15, right = 15, bottom = 30;
+        int left = 40, top = 15, right = 20, bottom = 30;
         int w = panelChart.Width - left - right;
         int h = panelChart.Height - top - bottom;
         int teams = league.Teams.Count;
@@ -109,6 +109,7 @@ public partial class TeamStatsForm : Form
         foreach (Point pt in points)
             g.FillEllipse(Brushes.RoyalBlue, pt.X - 4, pt.Y - 4, 8, 8);
 
-        g.DrawString("тур", Font, Brushes.Gray, left + w - 20, top + h + 8);
+        // підпис осі зліва знизу, щоб не налазив на номер останнього туру
+        g.DrawString("тур:", Font, Brushes.Gray, 2, top + h + 8);
     }
 }
