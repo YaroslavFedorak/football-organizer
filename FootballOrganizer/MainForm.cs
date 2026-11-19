@@ -65,15 +65,24 @@ public partial class MainForm : Form
         cup.AddTeam(new Team("Ворскла", "Полтава"));
         // 6 команд - дві пройдуть в 1/2 без гри
         cup.GenerateSchedule();
+        // перший раунд зіграний повністю (один матч по пенальті), і один півфінал,
+        // щоб у сітці було видно як команди проходять далі
+        bool penaltyShown = false;
         foreach (CupTie tie in cup.Rounds[0])
         {
-            if (!tie.IsBye)
+            if (tie.IsBye)
+                continue;
+            if (!penaltyShown)
             {
                 tie.Matches[0].SetResult(1, 1);
-                tie.PenaltyWinner = tie.TeamA;
-                break;
+                tie.PenaltyWinner = tie.TeamB;
+                penaltyShown = true;
             }
+            else
+                tie.Matches[0].SetResult(rnd.Next(2, 4), rnd.Next(0, 2));
         }
+        cup.AdvanceRound();
+        cup.Rounds[1][0].Matches[0].SetResult(2, 1);
         tournaments.Add(cup);
     }
 
