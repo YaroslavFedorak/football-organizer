@@ -54,17 +54,27 @@ public class Cup : Tournament
         // якщо команд не 4, 8, 16... то частина команд проходить далі без гри
         int byes = BracketSize - list.Count;
 
+        // вільні проходи розкидаємо по сітці рівномірно,
+        // інакше команди без гри зустрічаються між собою вже в наступному раунді
+        int slots = BracketSize / 2;
+        HashSet<int> byeSlots = new HashSet<int>();
+        for (int k = 0; k < byes; k++)
+            byeSlots.Add(k * slots / byes);
+
         List<CupTie> first = new List<CupTie>();
         int i = 0;
-        for (int b = 0; b < byes; b++)
+        for (int slot = 0; slot < slots; slot++)
         {
-            first.Add(new CupTie(list[i], null));
-            i++;
-        }
-        while (i < list.Count)
-        {
-            first.Add(CreateTie(list[i], list[i + 1], 1));
-            i += 2;
+            if (byeSlots.Contains(slot))
+            {
+                first.Add(new CupTie(list[i], null));
+                i++;
+            }
+            else
+            {
+                first.Add(CreateTie(list[i], list[i + 1], 1));
+                i += 2;
+            }
         }
         Rounds.Add(first);
     }
