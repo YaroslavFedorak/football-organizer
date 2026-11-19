@@ -230,6 +230,11 @@ public partial class MainForm : Form
     {
         if (listBoxTournaments.SelectedItem is Tournament t)
         {
+            DialogResult answer = MessageBox.Show("Видалити турнір \"" + t.Name + "\" разом з усіма результатами?",
+                "Видалення", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (answer != DialogResult.Yes)
+                return;
+
             tournaments.Remove(t);
             RefreshList();
         }
