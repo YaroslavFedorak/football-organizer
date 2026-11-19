@@ -50,6 +50,15 @@ public partial class TournamentForm : Form
             return;
         }
 
+        // однакові назви плутають таблицю і статистику
+        if (teams.Any(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase)))
+        {
+            MessageBox.Show("Команда з такою назвою вже є в списку", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            textBoxTeam.SelectAll();
+            textBoxTeam.Focus();
+            return;
+        }
+
         teams.Add(new Team(name, textBoxCity.Text.Trim()));
         RefreshTeams();
 

@@ -23,8 +23,15 @@ public abstract class Tournament
     // складає календар матчів
     public abstract void GenerateSchedule();
 
+    public bool HasTeam(string name)
+    {
+        return Teams.Any(t => string.Equals(t.Name, name.Trim(), StringComparison.OrdinalIgnoreCase));
+    }
+
     public void AddTeam(Team team)
     {
+        if (HasTeam(team.Name))
+            throw new ArgumentException("Команда \"" + team.Name + "\" вже є в турнірі");
         Teams.Add(team);
     }
 
