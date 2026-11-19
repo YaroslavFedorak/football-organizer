@@ -214,8 +214,8 @@ public partial class CupForm : Form
     private const int BoxW = 190;
     private const int BoxH = 44;
     private const int Gap = 50;
-    private const int Top = 20;
-    private const int Left = 20;
+    private const int TopMargin = 20;
+    private const int LeftMargin = 20;
 
     // y центру пари j в раунді r (r з нуля)
     // пара наступного раунду стоїть посередині між двома своїми попередніми
@@ -223,7 +223,7 @@ public partial class CupForm : Form
     {
         int unit = BoxH + 16;
         int k = (int)Math.Pow(2, r);
-        return Top + BoxH / 2 + (int)((j * k + (k - 1) / 2.0) * unit);
+        return TopMargin + BoxH / 2 + (int)((j * k + (k - 1) / 2.0) * unit);
     }
 
     private void ResizeCanvas()
@@ -232,8 +232,8 @@ public partial class CupForm : Form
             return;
         int rounds = cup.TotalRounds;
         int firstTies = cup.BracketSize / 2;
-        panelCanvas.Width = Left + (rounds + 1) * (BoxW + Gap);
-        panelCanvas.Height = Top * 2 + firstTies * (BoxH + 16);
+        panelCanvas.Width = LeftMargin + (rounds + 1) * (BoxW + Gap);
+        panelCanvas.Height = TopMargin * 2 + firstTies * (BoxH + 16);
         panelCanvas.Invalidate();
     }
 
@@ -243,7 +243,7 @@ public partial class CupForm : Form
         g.Clear(Color.White);
         if (cup.Rounds.Count == 0)
         {
-            g.DrawString("Жеребкування ще не проводилось", Font, Brushes.Gray, Left, Top);
+            g.DrawString("Жеребкування ще не проводилось", Font, Brushes.Gray, LeftMargin, TopMargin);
             return;
         }
 
@@ -254,7 +254,7 @@ public partial class CupForm : Form
         for (int r = 0; r < rounds; r++)
         {
             int ties = cup.BracketSize / (int)Math.Pow(2, r + 1);
-            int x = Left + r * (BoxW + Gap);
+            int x = LeftMargin + r * (BoxW + Gap);
             g.DrawString(cup.RoundName(r + 1), bold, Brushes.DarkBlue, x, 2);
 
             for (int j = 0; j < ties; j++)
@@ -304,7 +304,7 @@ public partial class CupForm : Form
         // переможець
         if (cup.Champion != null)
         {
-            int x = Left + rounds * (BoxW + Gap);
+            int x = LeftMargin + rounds * (BoxW + Gap);
             int cy = CenterY(rounds - 1, 0);
             g.DrawLine(line, x - Gap, cy, x, cy);
             g.DrawString("Володар кубка:", Font, Brushes.DarkGreen, x, cy - 20);
