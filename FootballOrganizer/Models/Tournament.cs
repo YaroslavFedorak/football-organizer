@@ -23,6 +23,12 @@ public abstract class Tournament
     // складає календар матчів
     public abstract void GenerateSchedule();
 
+    // видаляє календар і всі результати
+    public virtual void ClearSchedule()
+    {
+        Matches.Clear();
+    }
+
     public bool HasTeam(string name)
     {
         return Teams.Any(t => string.Equals(t.Name, name.Trim(), StringComparison.OrdinalIgnoreCase));

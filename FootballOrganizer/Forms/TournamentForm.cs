@@ -93,6 +93,18 @@ public partial class TournamentForm : Form
         Tournament t;
         if (editing != null)
         {
+            // календар складений під старий склад команд - якщо склад змінився, його треба скласти заново
+            bool teamsChanged = teams.Count != editing.Teams.Count || teams.Any(team => !editing.Teams.Contains(team));
+            bool returnChanged = checkBoxReturn.Checked != editing.HasReturnMatches;
+            if (editing.Matches.Count > 0 && (teamsChanged || returnChanged))
+            {
+                DialogResult answer = MessageBox.Show("Склад команд або формат турніру змінився, тому календар і всі результати буде видалено. Продовжити?",
+                    "Зміна турніру", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (answer != DialogResult.Yes)
+                    return;
+                editing.ClearSchedule();
+            }
+
             t = editing;
             t.Name = name;
             t.HasReturnMatches = checkBoxReturn.Checked;

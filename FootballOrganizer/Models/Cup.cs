@@ -17,6 +17,12 @@ public class Cup : Tournament
         get { return "Кубок"; }
     }
 
+    public override void ClearSchedule()
+    {
+        base.ClearSchedule();
+        Rounds.Clear();
+    }
+
     // розмір сітки - найближчий степінь двійки (4, 8, 16...)
     public int BracketSize
     {
