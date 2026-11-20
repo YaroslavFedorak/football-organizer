@@ -1,3 +1,4 @@
+using System.Drawing.Printing;
 using FootballOrganizer.Models;
 
 namespace FootballOrganizer.Forms;
@@ -239,8 +240,13 @@ public partial class CupForm : Form
 
     private void panelCanvas_Paint(object? sender, PaintEventArgs e)
     {
-        Graphics g = e.Graphics;
-        g.Clear(Color.White);
+        e.Graphics.Clear(Color.White);
+        DrawBracket(e.Graphics);
+    }
+
+    // малює сітку - і на екрані, і при друку
+    private void DrawBracket(Graphics g)
+    {
         if (cup.Rounds.Count == 0)
         {
             g.DrawString("Жеребкування ще не проводилось", Font, Brushes.Gray, LeftMargin, TopMargin);
@@ -313,5 +319,50 @@ public partial class CupForm : Form
 
         bold.Dispose();
         line.Dispose();
+    }
+
+    // ---------------- друк сітки ----------------
+
+    private void buttonPrint_Click(object sender, EventArgs e)
+    {
+        if (cup.Rounds.Count == 0)
+        {
+            MessageBox.Show("Спочатку проведіть жеребкування", "Друк", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        PrintDocument doc = new PrintDocument();
+        doc.DocumentName = cup.Name;
+        // сітка широка, тому друкуємо на альбомному аркуші
+        doc.DefaultPageSettings.Landscape = true;
+        doc.PrintPage += PrintBracket;
+
+        using PrintPreviewDialog preview = new PrintPreviewDialog();
+        preview.Document = doc;
+        preview.Text = "Попередній перегляд друку";
+        preview.Width = 1000;
+        preview.Height = 750;
+        preview.ShowDialog(this);
+    }
+
+    private void PrintBracket(object? sender, PrintPageEventArgs e)
+    {
+        Graphics g = e.Graphics!;
+        Rectangle area = e.MarginBounds;
+
+        using Font title = new Font("Segoe UI", 14, FontStyle.Bold);
+        g.DrawString(cup.Name, title, Brushes.Black, area.Left, area.Top);
+        g.DrawString("Сітка кубка, " + DateTime.Now.ToString("dd.MM.yyyy"), Font, Brushes.Gray, area.Left, area.Top + 28);
+
+        // зменшуємо сітку, якщо вона не влазить на аркуш
+        int top = area.Top + 60;
+        float scaleX = (float)area.Width / panelCanvas.Width;
+        float scaleY = (float)(area.Bottom - top) / panelCanvas.Height;
+        float scale = Math.Min(1f, Math.Min(scaleX, scaleY));
+
+        g.TranslateTransform(area.Left, top);
+        g.ScaleTransform(scale, scale);
+        DrawBracket(g);
+        g.ResetTransform();
     }
 }

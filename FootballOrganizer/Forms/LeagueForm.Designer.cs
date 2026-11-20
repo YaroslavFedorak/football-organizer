@@ -33,6 +33,7 @@ partial class LeagueForm
         buttonGenerate = new Button();
         tabPageTable = new TabPage();
         dataGridViewTable = new DataGridView();
+        buttonPrint = new Button();
         colPlace = new DataGridViewTextBoxColumn();
         colTeam = new DataGridViewTextBoxColumn();
         colPlayed = new DataGridViewTextBoxColumn();
@@ -194,6 +195,7 @@ partial class LeagueForm
         //
         // tabPageTable
         //
+        tabPageTable.Controls.Add(buttonPrint);
         tabPageTable.Controls.Add(dataGridViewTable);
         tabPageTable.Location = new Point(4, 24);
         tabPageTable.Name = "tabPageTable";
@@ -211,14 +213,24 @@ partial class LeagueForm
         dataGridViewTable.BackgroundColor = SystemColors.Window;
         dataGridViewTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
         dataGridViewTable.Columns.AddRange(new DataGridViewColumn[] { colPlace, colTeam, colPlayed, colWon, colDrawn, colLost, colGoals, colDiff, colPoints });
-        dataGridViewTable.Dock = DockStyle.Fill;
+        dataGridViewTable.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         dataGridViewTable.Location = new Point(3, 3);
         dataGridViewTable.Name = "dataGridViewTable";
         dataGridViewTable.ReadOnly = true;
         dataGridViewTable.RowHeadersVisible = false;
         dataGridViewTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        dataGridViewTable.Size = new Size(670, 427);
-        dataGridViewTable.TabIndex = 0;
+        dataGridViewTable.Size = new Size(670, 384);
+        // 
+        // buttonPrint
+        // 
+        buttonPrint.Location = new Point(3, 393);
+        buttonPrint.Name = "buttonPrint";
+        buttonPrint.Size = new Size(200, 32);
+        buttonPrint.TabIndex = 0;
+        buttonPrint.Text = "Друк таблиці";
+        buttonPrint.UseVisualStyleBackColor = true;
+        buttonPrint.Click += buttonPrint_Click;
+        dataGridViewTable.TabIndex = 1;
         //
         // colPlace
         //
@@ -324,6 +336,7 @@ partial class LeagueForm
     private Button buttonSave;
     private Button buttonClear;
     private DataGridView dataGridViewTable;
+    private Button buttonPrint;
     private DataGridViewTextBoxColumn colPlace;
     private DataGridViewTextBoxColumn colTeam;
     private DataGridViewTextBoxColumn colPlayed;

@@ -33,6 +33,7 @@ partial class CupForm
         labelTie = new Label();
         listBoxTies = new ListBox();
         buttonNext = new Button();
+        buttonPrint = new Button();
         comboBoxRound = new ComboBox();
         labelRound = new Label();
         labelStatus = new Label();
@@ -64,6 +65,7 @@ partial class CupForm
         //
         tabPageRounds.Controls.Add(groupBoxResult);
         tabPageRounds.Controls.Add(listBoxTies);
+        tabPageRounds.Controls.Add(buttonPrint);
         tabPageRounds.Controls.Add(buttonNext);
         tabPageRounds.Controls.Add(comboBoxRound);
         tabPageRounds.Controls.Add(labelRound);
@@ -124,6 +126,16 @@ partial class CupForm
         buttonNext.Text = "Наступний раунд";
         buttonNext.UseVisualStyleBackColor = true;
         buttonNext.Click += buttonNext_Click;
+        // 
+        // buttonPrint
+        // 
+        buttonPrint.Location = new Point(594, 51);
+        buttonPrint.Name = "buttonPrint";
+        buttonPrint.Size = new Size(150, 29);
+        buttonPrint.TabIndex = 1;
+        buttonPrint.Text = "Друк сітки";
+        buttonPrint.UseVisualStyleBackColor = true;
+        buttonPrint.Click += buttonPrint_Click;
         //
         // listBoxTies
         //
@@ -319,6 +331,7 @@ partial class CupForm
     private Label labelRound;
     private ComboBox comboBoxRound;
     private Button buttonNext;
+    private Button buttonPrint;
     private ListBox listBoxTies;
     private GroupBox groupBoxResult;
     private Label labelTie;
