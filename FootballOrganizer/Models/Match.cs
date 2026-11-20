@@ -2,15 +2,15 @@ namespace FootballOrganizer.Models;
 
 public class Match
 {
-    public Team HomeTeam { get; set; }
-    public Team AwayTeam { get; set; }
+    public Team HomeTeam { get; private set; }
+    public Team AwayTeam { get; private set; }
 
-    // null поки матч не зіграний
-    public int? HomeGoals { get; set; }
-    public int? AwayGoals { get; set; }
+    // null поки матч не зіграний, змінюються тільки через SetResult() і ClearResult()
+    public int? HomeGoals { get; private set; }
+    public int? AwayGoals { get; private set; }
 
     // номер туру (для кубка - номер раунду)
-    public int Round { get; set; }
+    public int Round { get; private set; }
 
     public Match(Team home, Team away, int round)
     {

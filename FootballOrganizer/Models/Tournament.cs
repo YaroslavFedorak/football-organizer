@@ -3,7 +3,19 @@ namespace FootballOrganizer.Models;
 // базовий клас для всіх турнірів
 public abstract class Tournament
 {
-    public string Name { get; set; }
+    private string name = "";
+
+    // назва не може бути порожньою
+    public string Name
+    {
+        get { return name; }
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Назва турніру не може бути порожньою");
+            name = value.Trim();
+        }
+    }
 
     // чи граються матчі у відповідь
     public bool HasReturnMatches { get; set; }
